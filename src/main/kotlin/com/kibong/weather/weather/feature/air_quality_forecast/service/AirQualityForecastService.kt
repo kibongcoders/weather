@@ -1,9 +1,11 @@
-package com.kibong.weather.weather.feature.air_pollution.service
+package com.kibong.weather.weather.feature.air_quality_forecast.service
 
 import com.kibong.weather.weather.config.BaseUrlProperties
 import com.kibong.weather.weather.config.KeyProperties
+import com.kibong.weather.weather.domain.AirQualityForecast
 import com.kibong.weather.weather.feature.air_pollution.dto.AirQualityForecastResponseDto
 import com.kibong.weather.weather.feature.air_pollution.dto.ResponseDto
+import com.kibong.weather.weather.feature.air_quality_forecast.repository.AirQualityForecastRepository
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -15,15 +17,16 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @Service
 @RequiredArgsConstructor
-class AirPollutionService(
+class AirQualityForecastService(
     private val restTemplate: RestTemplate,
     private val baseUrlProperties: BaseUrlProperties,
-    private val keyProperties: KeyProperties
+    private val keyProperties: KeyProperties,
+    private val airQualityForecastRepository: AirQualityForecastRepository
 ) {
 
     private val logger = KotlinLogging.logger {}
 
-    fun getAirPollution() {
+    fun getAirQualityForecast() {
         val url = UriComponentsBuilder.fromHttpUrl(baseUrlProperties.airPollution)
             .path("/getMinuDustFrcstDspth")
             .queryParam("serviceKey", keyProperties.decoding)
@@ -38,8 +41,15 @@ class AirPollutionService(
         val parseToJsonElement = Json.parseToJsonElement(returnObject.toString())
         val body = parseToJsonElement.jsonObject.get("response")?.jsonObject?.get("body")
         val responseDto: ResponseDto<AirQualityForecastResponseDto>? = body?.let { Json.decodeFromJsonElement(it) }
-        responseDto?.items?.forEach {
-            logger.info { "item : $it" }
+        val items = responseDto?.items
+        val airQualityForecasts = mutableListOf<AirQualityForecast>()
+        if (items != null) {
+            for (item in items) {
+
+                val airQualityForecast = AirQualityForecast.fromAirPollutionResponseDto(item)
+                airQualityForecasts.add(airQualityForecast)
+            }
         }
+        airQualityForecastRepository.saveAll(airQualityForecasts)
     }
 }

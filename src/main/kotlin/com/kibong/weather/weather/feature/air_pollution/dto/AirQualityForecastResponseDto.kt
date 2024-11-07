@@ -3,7 +3,7 @@ package com.kibong.weather.weather.feature.air_pollution.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AirPollutionResponseDto(
+data class AirQualityForecastResponseDto(
     val imageUrl4: String?,
     val informCode: String?,
     val imageUrl5: String?,
