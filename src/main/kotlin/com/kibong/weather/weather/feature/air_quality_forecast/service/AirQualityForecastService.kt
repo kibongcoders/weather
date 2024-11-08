@@ -25,15 +25,17 @@ class AirQualityForecastService(
 ) {
 
     private val logger = KotlinLogging.logger {}
+    val RETURN_TYPE: String = "json"
+    private final val GET_AIR_QUALITY_FORECAST_END_POINT = "/getMinuDustFrcstDspth"
 
-    fun getAirQualityForecast() {
+    fun getAirQualityForecast(pageNo: Int, pageSize: Int, searchDate: String) {
         val url = UriComponentsBuilder.fromHttpUrl(baseUrlProperties.airPollution)
-            .path("/getMinuDustFrcstDspth")
+            .path(GET_AIR_QUALITY_FORECAST_END_POINT)
             .queryParam("serviceKey", keyProperties.decoding)
-            .queryParam("returnType", "json")
-            .queryParam("numOfRows", 100)
-            .queryParam("pageNo", 1)
-            .queryParam("searchDate", "2024-11-07")
+            .queryParam("returnType", RETURN_TYPE)
+            .queryParam("numOfRows", pageSize)
+            .queryParam("pageNo", Int)
+            .queryParam("searchDate", searchDate)
             .build()
             .toUriString()
 
@@ -43,8 +45,16 @@ class AirQualityForecastService(
         val responseDto: ResponseDto<AirQualityForecastResponseDto>? = body?.let { Json.decodeFromJsonElement(it) }
         val items = responseDto?.items
         val airQualityForecasts = mutableListOf<AirQualityForecast>()
+        val dataTimeSet = HashSet<String>()
+
         if (items != null) {
+            logger.info { "items : $items" }
             for (item in items) {
+                if (dataTimeSet.contains("${item.informData},${item.informCode}")) {
+                    continue
+                } else {
+                    item.dataTime?.let { dataTimeSet.add("${item.informData},${item.informCode}") }
+                }
 
                 val airQualityForecast = AirQualityForecast.fromAirPollutionResponseDto(item)
                 airQualityForecasts.add(airQualityForecast)

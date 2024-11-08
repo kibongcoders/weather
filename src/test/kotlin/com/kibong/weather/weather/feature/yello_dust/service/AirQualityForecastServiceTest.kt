@@ -15,6 +15,6 @@ class AirQualityForecastServiceTest {
 
     @Test
     fun getAirPollution() {
-        airQualityForecastService.getAirQualityForecast()
+        airQualityForecastService.getAirQualityForecast(0, 100, "2024-11-07")
     }
 }
