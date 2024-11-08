@@ -1,6 +1,6 @@
 package com.kibong.weather.weather.domain
 
-import com.kibong.weather.weather.feature.air_pollution.dto.AirQualityForecastResponseDto
+import com.kibong.weather.weather.feature.air_quality_forecast.dto.AirQualityForecastResponseDto
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id

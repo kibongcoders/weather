@@ -1,4 +1,4 @@
-package com.kibong.weather.weather.feature.air_pollution.dto
+package com.kibong.weather.weather.feature.air_quality_forecast.dto
 
 import kotlinx.serialization.Serializable
 
