@@ -10,6 +10,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
 import lombok.RequiredArgsConstructor
+
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -28,6 +29,10 @@ class AirQualityForecastService(
         private val logger = KotlinLogging.logger {}
         private const val RETURN_TYPE: String = "json"
         private const val GET_AIR_QUALITY_FORECAST_END_POINT = "/getMinuDustFrcstDspth"
+    }
+
+    fun getAirQualityForecast(searchDate: String){
+
     }
 
     fun saveAirQualityForecast(pageNo: Int, pageSize: Int, searchDate: String) {
