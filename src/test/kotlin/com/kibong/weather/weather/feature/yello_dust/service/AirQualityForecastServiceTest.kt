@@ -16,4 +16,9 @@ class AirQualityForecastServiceTest {
     fun getAirPollution() {
         saveAirQualityForecastService.saveAirQualityForecast(0, 100, "2024-11-07")
     }
+
+    @Test
+    fun getAirQualityForecast() {
+        saveAirQualityForecastService.getAirQualityForecast("2024-11-07")
+    }
 }

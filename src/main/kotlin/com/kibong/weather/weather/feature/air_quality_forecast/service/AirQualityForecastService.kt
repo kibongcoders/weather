@@ -6,6 +6,8 @@ import com.kibong.weather.weather.domain.AirQualityForecast
 import com.kibong.weather.weather.feature.air_quality_forecast.dto.AirQualityForecastResponseDto
 import com.kibong.weather.weather.feature.air_quality_forecast.dto.ResponseDto
 import com.kibong.weather.weather.feature.air_quality_forecast.repository.AirQualityForecastRepository
+import com.linecorp.kotlinjdsl.spring.data.SpringDataQueryFactory
+import com.linecorp.kotlinjdsl.spring.data.listQuery
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -22,7 +24,8 @@ class AirQualityForecastService(
     private val restTemplate: RestTemplate,
     private val baseUrlProperties: BaseUrlProperties,
     private val keyProperties: KeyProperties,
-    private val airQualityForecastRepository: AirQualityForecastRepository
+    private val airQualityForecastRepository: AirQualityForecastRepository,
+    private val queryFactory: SpringDataQueryFactory
 ) {
 
     companion object {
@@ -32,7 +35,14 @@ class AirQualityForecastService(
     }
 
     fun getAirQualityForecast(searchDate: String){
+        val listQuery = queryFactory.listQuery {
+            select(entity(AirQualityForecast::class))
+            from(entity(AirQualityForecast::class))
+        }
 
+        for (airQualityForecast in listQuery) {
+            logger.info { airQualityForecast?.aisQualityForecastId }
+        }
     }
 
     fun saveAirQualityForecast(pageNo: Int, pageSize: Int, searchDate: String) {
