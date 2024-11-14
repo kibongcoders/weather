@@ -36,7 +36,7 @@ class AirQualityForecast private constructor(
     @Column(name = "air_quality_forecast_id", nullable = false, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Comment("공기 질 예보 아이디")
-    var aisQualityForecastId: UUID? = null
+    var aisQualityForecastId: UUID = UUID.randomUUID()
 
     @Column(name = "image_url_6", nullable = true, columnDefinition = "VARCHAR(600)")
     @Comment("시간대별 예측모델 결과사진 6")
