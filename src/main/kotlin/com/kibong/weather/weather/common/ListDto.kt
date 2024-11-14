@@ -1,6 +1,6 @@
 package com.kibong.weather.weather.common
 
-data class ListDto<T>(
+data class ListDto(
     val totalCount: Int,
-    val items: List<T>
+    val items: List<Any>
 )

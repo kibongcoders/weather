@@ -35,12 +35,11 @@ class AirQualityForecastService(
         private const val GET_AIR_QUALITY_FORECAST_END_POINT = "/getMinuDustFrcstDspth"
     }
 
-    fun getAirQualityForecast(searchDate: String): ListDto<AirQualityForecastDto> {
+    fun getAirQualityForecast(searchDate: String): ListDto {
         try {
             val airQualityForecastDtoList = airQualityForecastQueryRepository.getAirQualityForecast(LocalDate.parse(searchDate)).map { airQualityForecast ->
                 AirQualityForecastDto.fromAirQualityForecast(airQualityForecast)
             }.toList()
-
             return ListDto(airQualityForecastDtoList.size, airQualityForecastDtoList)
         } catch (e: Exception) {
             logger.error(e) { "getAirQualityForecast error" }
