@@ -15,14 +15,13 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @Component
 @RequiredArgsConstructor
-class RequestApiUtil constructor(
+class RequestApiUtil(
     private val restTemplate: RestTemplate,
     private val keyProperties: KeyProperties,
 ) {
 
     companion object {
         private val logger = KotlinLogging.logger {}
-        private const val RETURN_TYPE: String = "json"
     }
 
     fun requestApi(
@@ -32,7 +31,6 @@ class RequestApiUtil constructor(
         val uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(requestApiDto.url)
             .path(requestApiDto.uri)
             .queryParam("serviceKey", keyProperties.decoding)
-            .queryParam("returnType", RETURN_TYPE)
 
         if (requestApiDto.paramMap != null) {
             requestApiDto.paramMap.forEach { (key, value) ->
@@ -59,6 +57,7 @@ class RequestApiUtil constructor(
 
         response.statusCode
         if (response.statusCode.is2xxSuccessful) {
+            response.body?.let { logger.info { it } }
             return response.body?.let { Json.parseToJsonElement(it) }
         } else {
             logger.warn { response.body }
