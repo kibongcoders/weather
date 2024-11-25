@@ -1,7 +1,7 @@
 package com.kibong.weather.weather.util
 
+import com.kibong.weather.weather.common.api.RequestApiDto
 import com.kibong.weather.weather.config.KeyProperties
-import com.kibong.weather.weather.feature.typhoon.dto.RequestApiDto
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import lombok.RequiredArgsConstructor
@@ -57,7 +57,6 @@ class RequestApiUtil(
 
         response.statusCode
         if (response.statusCode.is2xxSuccessful) {
-            response.body?.let { logger.info { it } }
             return response.body?.let { Json.parseToJsonElement(it) }
         } else {
             logger.warn { response.body }

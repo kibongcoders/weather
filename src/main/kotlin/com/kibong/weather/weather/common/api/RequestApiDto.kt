@@ -1,4 +1,4 @@
-package com.kibong.weather.weather.feature.typhoon.dto
+package com.kibong.weather.weather.common.api
 
 import org.springframework.http.HttpMethod
 
